@@ -23,16 +23,26 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const menuCollection = client.db("bistroDb").collection("menu");
+    const userCollection = client.db("bistroDb").collection("users");
     const reviewCollection = client.db("bistroDb").collection("reviews");
     const cartCollection = client.db("bistroDb").collection("carts");
+    // user related apis
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+    // menu apis
     app.get("/menu", async (req, res) => {
       const result = await menuCollection.find().toArray();
       res.send(result);
     });
+    // reviews apis
     app.get("/reviews", async (req, res) => {
       const result = await reviewCollection.find().toArray();
       res.send(result);
     });
+    // cart related apis
     app.get("/carts", async (req, res) => {
       const email = req.query.email;
       const query = { email };
