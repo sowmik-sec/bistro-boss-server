@@ -238,7 +238,7 @@ async function run() {
       const revenue = result.length > 0 ? result[0].totalRevenue : 0;
       res.send({ users, menuItems, orders, revenue });
     });
-    app.get("/order-stats", async (req, res) => {
+    app.get("/order-stats", verifyToken, verifyAdmin, async (req, res) => {
       const result = await paymentCollection
         .aggregate([
           {
